@@ -1,0 +1,5 @@
+"/Users/kamilkoziol/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/222.4167.35/CLion.app/Contents/bin/cmake/mac/bin/cmake" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=/Users/kamilkoziol/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/222.4167.35/CLion.app/Contents/bin/ninja/mac/ninja" -G Ninja -S /Users/kamilkoziol/GitHub/SpatialHashGrid -B /Users/kamilkoziol/GitHub/SpatialHashGrid/cmake-build-debug
+-- Found SFML 2.5.1 in /usr/local/lib/cmake/SFML
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/kamilkoziol/GitHub/SpatialHashGrid/cmake-build-debug
