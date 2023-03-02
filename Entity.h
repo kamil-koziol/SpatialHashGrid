@@ -8,16 +8,22 @@
 
 #include <SFML/Graphics.hpp>
 
-class Entity: public sf::Transformable, public sf::Drawable {
+class Entity: private sf::Transformable, public sf::Drawable {
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
-
 protected:
     void updateBoundingBox();
 public:
     Entity(const sf::FloatRect &boundingBox);
     void update();
 
+    void setPosition(float x, float y);
+    sf::Vector2f getPosition();
+
+    sf::Vector2i lowerBoundIndex;
+    sf::Vector2i higherBoundIndex;
     sf::FloatRect boundingBox;
+
+    bool colliding = false;
 };
 
 

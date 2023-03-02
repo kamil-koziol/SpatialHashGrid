@@ -14,9 +14,12 @@ void SpatialHashGrid::addEntity(Entity *entity) {
     auto i1 = getCellIndex(sf::Vector2f(x-(w/2), y-(h/2)));
     auto i2 = getCellIndex(sf::Vector2f (x+(w/2), y+(h/2)));
 
+    entity->lowerBoundIndex = i1;
+    entity->higherBoundIndex = i2;
+
     for(int _y = i1.y, yn=i2.y; _y<=yn; _y++) {
         for(int _x = i1.x, xn=i2.x; _x<=xn; _x++) {
-            const auto key = std::pair(x, y);
+            const auto key = std::pair(_x, _y);
             if(!cells.contains(key)) {
                 std::set<Entity*> entitySet = {};
                 cells[key] = entitySet;
@@ -33,7 +36,6 @@ sf::Vector2i SpatialHashGrid::getCellIndex(sf::Vector2f pos) {
 
     int xIdx = floor(_x * float(dimensions.x - 1));
     int yIdx = floor(_y * float(dimensions.y - 1));
-
 
     return {xIdx, yIdx};
 }
@@ -59,7 +61,7 @@ std::set<Entity *> SpatialHashGrid::findNear(sf::Vector2f pos, sf::Vector2i boun
 
     for(int _y = i1.y, yn=i2.y; _y<=yn; _y++) {
         for(int _x = i1.x, xn=i2.x; _x<=xn; _x++) {
-            const auto key = std::pair(x, y);
+            const auto key = std::pair(_x, _y);
             if(cells.contains(key)) {
                 for(auto entity: cells[key]) {
                     clients.emplace(entity);
@@ -69,4 +71,34 @@ std::set<Entity *> SpatialHashGrid::findNear(sf::Vector2f pos, sf::Vector2i boun
     }
 
     return clients;
+}
+
+void SpatialHashGrid::removeEntity(Entity *entity) {
+    auto i1 = entity->lowerBoundIndex;
+    auto i2 = entity->higherBoundIndex;
+
+    for(int _y = i1.y, yn=i2.y; _y<=yn; _y++) {
+        for(int _x = i1.x, xn=i2.x; _x<=xn; _x++) {
+            const auto key = std::pair(_x, _y);
+            cells[key].erase(entity);
+        }
+    }
+}
+
+void SpatialHashGrid::updateEntity(Entity *entity) {
+    // checking if indexes have changed
+    float x = entity->boundingBox.left;
+    float y = entity->boundingBox.top;
+    float w = entity->boundingBox.width;
+    float h = entity->boundingBox.height;
+
+    auto i1 = getCellIndex(sf::Vector2f(x-(w/2), y-(h/2)));
+    auto i2 = getCellIndex(sf::Vector2f (x+(w/2), y+(h/2)));
+
+    if(i1 == entity->lowerBoundIndex && i2 == entity->higherBoundIndex) {
+        return;
+    }
+
+    removeEntity(entity);
+    addEntity(entity);
 }

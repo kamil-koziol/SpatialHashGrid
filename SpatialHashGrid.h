@@ -21,11 +21,12 @@ private:
     std::map<std::pair<int, int>, std::set<Entity*>> cells;
 protected:
 public:
-    SpatialHashGrid(int dimensions);
     void addEntity(Entity* entity);
     float zeroOneCap(float x);
     std::set<Entity*> findNear(sf::Vector2f pos, sf::Vector2i bounds);
+    void removeEntity(Entity* entity);
     sf::Vector2i getCellIndex(sf::Vector2f pos);
+    void updateEntity(Entity* entity);
 };
 
 
